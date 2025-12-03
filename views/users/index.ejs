@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            gap: 20px;
+        }
+
+        header a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .products {
+            grid-template-columns: 1fr 1fr 1fr;
+            display: grid;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-items: center;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('../partials/nav.ejs') %>
+
+        <div class="products">
+            <% products.forEach(product=> { %>
+                <div class="card">
+                    <img src="/image/<%= product.image %>" alt="<%= product.ProductName %>">
+                    <h3>
+                        <%= product.ProductName %>
+                    </h3>
+                    <p>Price: <%= product.Price %>
+                    </p>
+                    <p>Stock: <%= product.Stock %>
+                    </p>
+                </div>
+                <% }) %>
+        </div>
+</body>
+
+</html>
