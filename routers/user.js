@@ -79,6 +79,9 @@ app.get('/', (req, res) => {
     res.render('users/index', { products: results, filter: 'all' });
   });
 });
+app.get('/views/users/basket.ejs', (req, res) => {
+    res.render('users/basket');
+});
 
 app.get('/:filter', (req, res) => {
   const filter = req.params.filter;

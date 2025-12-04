@@ -45,10 +45,16 @@
             height: 300px;
             object-fit: cover;
         }
+
+        button.basket:hover {
+            background-color: #ffffff;
+            color: black;
+        }
     </style>
 </head>
 
 <body>
+
     <%- include('../partials/nav.ejs') %>
 
         <div class="products">
@@ -62,9 +68,53 @@
                     </p>
                     <p>Stock: <%= product.Stock %>
                     </p>
+
+                    <button
+                        style="cursor:pointer;height:40px;width:80px;border-radius:10px;border:none;background-color:#000;color:white;"
+                        class="basket" data-id="<%= product.Id %>" data-name="<%= product.ProductName %>"
+                        data-price="<%= product.Price %>" data-image="<%= product.image %>">
+                        basket
+                    </button>
                 </div>
                 <% }) %>
         </div>
+
+        <script>
+            document.addEventListener("click", e => {
+                if (!e.target.classList.contains("basket")) return
+
+                const id = e.target.dataset.id
+                const name = e.target.dataset.name
+                const price = e.target.dataset.price
+                const image = e.target.dataset.image
+
+                const item = {
+                    id,
+                    name,
+                    price,
+                    image,
+                    qty: 1
+                }
+
+                let basket = JSON.parse(localStorage.getItem("basket")) || []
+
+                const exist = basket.find(p => p.id == id)
+
+                if (exist) {
+                    exist.qty++
+                } else {
+                    basket.push(item)
+                }
+
+                localStorage.setItem("basket", JSON.stringify(basket))
+
+                console.log("Basket:", basket)
+                
+
+            })
+        </script>
+
+
 </body>
 
 </html>

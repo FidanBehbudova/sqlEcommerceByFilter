@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .basket-item {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        .basket-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+        }
+
+        .basket-item div {
+            flex: 1;
+        }
+
+        button {
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            margin: 0 2px;
+        }
+
+        .increase {
+            background-color: #000000;
+            color: white;
+        }
+
+        .decrease {
+            background-color: #000000;
+            color: white;
+        }
+
+        .remove {
+            background-color: #6a0101;
+            color: white;
+        }
+
+        .clear {
+            background-color: #333;
+            color: white;
+            margin-top: 20px;
+        }
+
+        body {
+            font-family: Arial;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            gap: 20px;
+        }
+
+        header a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .products {
+            grid-template-columns: 1fr 1fr 1fr;
+            display: grid;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-items: center;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+
+        button.basket:hover {
+            background-color: #ffffff;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('../partials/nav.ejs') %>
+        <h1>Your Basket</h1>
+        <div id="basket-container" style="margin-left: 10%;margin-right:10% ;"></div>
+        <button class="clear" style="margin-left: 10%;margin-right:10% ;">Clear Basket</button>
+
+        <script>
+            function renderBasket() {
+                const basketContainer = document.getElementById("basket-container");
+                basketContainer.innerHTML = "";
+                let basket = JSON.parse(localStorage.getItem("basket")) || [];
+
+                if (basket.length === 0) {
+                    basketContainer.innerHTML = "<p>Basket is empty.</p>";
+                    return;
+                }
+
+                basket.forEach(item => {
+                    const div = document.createElement("div");
+                    div.classList.add("basket-item");
+
+                    div.innerHTML = `
+                    <img src="/image/${item.image}" alt="${item.name}">
+                    <div>
+                        <h4>${item.name}</h4>
+                        <p>Price: ${item.price}</p>
+                        <p>Quantity: <span class="qty">${item.qty}</span></p>
+                        <button class="increase">+</button>
+                        <button class="decrease">-</button>
+                        <button class="remove">Remove</button>
+                    </div>
+                `;
+
+
+                    div.querySelector(".increase").addEventListener("click", () => {
+                        item.qty++;
+                        localStorage.setItem("basket", JSON.stringify(basket));
+                        renderBasket();
+                    });
+
+                    div.querySelector(".decrease").addEventListener("click", () => {
+                        if (item.qty > 1) {
+                            item.qty--;
+                            localStorage.setItem("basket", JSON.stringify(basket));
+                            renderBasket();
+                        }
+                    });
+
+                    div.querySelector(".remove").addEventListener("click", () => {
+                        basket = basket.filter(b => b.id != item.id);
+                        localStorage.setItem("basket", JSON.stringify(basket));
+                        renderBasket();
+                    });
+
+                    basketContainer.appendChild(div);
+                });
+            }
+
+            document.querySelector(".clear").addEventListener("click", () => {
+                localStorage.removeItem("basket");
+                renderBasket();
+            });
+
+            renderBasket();
+        </script>
+
+</body>
+
+</html>
